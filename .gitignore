@@ -4,3 +4,5 @@
 
 /obj
 /.vs/LeetCodeSample/v16
+/.vs/LeetCodeSample/DesignTimeBuild
+/bin/Debug/netcoreapp3.1
