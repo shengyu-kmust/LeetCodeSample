@@ -1,80 +1,234 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
-namespace Server.Tests
+namespace LeetCodeSample
 {
     public class TreeProgram
     {
-        public void BTreeDFS(BTree tree, List<int> paths)
+        #region 遍历
+        #region 递归遍历，DFS遍历，即先，中，后序遍历
+        public List<int> RecursionBefore(BTree tree, List<int> paths)
         {
-            if (tree == null)
+            paths.Add(tree.Val);
+            if (tree.Left != null)
             {
-                return;
+                RecursionBefore(tree.Left, paths);
+            }
+            if (tree.Right != null)
+            {
+                RecursionBefore(tree.Right, paths);
+            }
+            return paths;
+        }
+        public List<int> RecursionMiddle(BTree tree, List<int> paths)
+        {
+            if (tree.Left != null)
+            {
+                RecursionMiddle(tree.Left, paths);
             }
             paths.Add(tree.Val);
-            BTreeDFS(tree.Left, paths);
-            BTreeDFS(tree.Right, paths);
+            if (tree.Right != null)
+            {
+                RecursionMiddle(tree.Right, paths);
+            }
+            return paths;
         }
 
-        public void Dfs(Tree node, List<int> paths)
+        public List<int> RecursionAfter(BTree tree, List<int> paths)
         {
-            paths.Add(node.Val);
-            if (node.Childs != null && node.Childs.Count > 0)
+            if (tree.Left != null)
             {
-                foreach (var child in node.Childs)
+                RecursionAfter(tree.Left, paths);
+            }
+            if (tree.Right != null)
+            {
+                RecursionAfter(tree.Right, paths);
+            }
+            paths.Add(tree.Val);
+            return paths;
+        }
+        #endregion
+        #region 用栈做迭代
+        /// <summary>
+        /// 先序迭代
+        /// </summary>
+        /// <param name="tree"></param>
+        /// <param name="paths"></param>
+        public void IterationBefore(BTree tree, out List<int> paths)
+        {
+            // 出栈：根，左，右
+            // 入栈：右，左，根
+            paths = new List<int>();
+            var stack = new Stack<BTree>();
+            stack.Push(tree);
+            while (stack.Count > 0)
+            {
+                var outTree = stack.Pop();
+                paths.Add(outTree.Val);
+                if (outTree.Right != null)
                 {
-                    Dfs(node, paths);
+                    stack.Push(outTree.Right);
+                }
+                if (outTree.Left != null)
+                {
+                    stack.Push(outTree.Left);
                 }
             }
         }
-
-        public void Bfs(Tree node, List<int> paths)
+        /// <summary>
+        /// 中序迭代
+        /// </summary>
+        /// <param name="tree"></param>
+        /// <param name="paths"></param>
+        public void IterationMiddle(BTree tree, out List<int> paths)
         {
-            paths.Add(node.Val);
-            if (node.Childs != null && node.Childs.Count > 0)
+            // 出栈：左，根，右
+            // 入栈：右，根，左
+            paths = new List<int>();
+            var stack = new Stack<BTree>();
+            stack.Push(tree);
+            while (stack.Count > 0)
             {
-                foreach (var child in node.Childs)
+                // 将树从栈里提出，并剪成根、左、右三个树
+                var root = stack.Pop();// 根树   
+                var left = root.Left; // 左树
+                var right = root.Right;// 右树
+                root.Left = null;//剪掉左
+                root.Right = null;//剪掉左
+                bool addRootToStack;//根是否要入栈
+
+                if (left == null && right == null)
                 {
-                    Dfs(node, paths);
+                    // 当从栈里取出的树的左/右树为空是，直接读取此节点，并不再入栈
+                    paths.Add(root.Val);
+                    addRootToStack = false;
+                }
+                else
+                {
+                    // 否则将此根节点放入到栈
+                    addRootToStack = true;
+                }
+                if (right != null)
+                {
+                    stack.Push(right);
+                }
+                if (addRootToStack)
+                {
+                    stack.Push(root);
+                }
+                if (left != null)
+                {
+                    stack.Push(left);
                 }
             }
         }
-        public class Tree
+        /// <summary>
+        /// 后序迭代
+        /// </summary>
+        /// <param name="tree"></param>
+        /// <param name="paths"></param>
+        public void IterationAfter(BTree tree, out List<int> paths)
         {
-            public Tree(int val)
+            // 出栈：左，右，根
+            // 入栈：根，右，左
+            paths = new List<int>();
+            var stack = new Stack<BTree>();
+            stack.Push(tree);
+            while (stack.Count > 0)
             {
-                this.Val = val;
-            }
-            public int Val { get; set; }
-            public List<Tree> Childs { get; set; }
-        }
+                // 将树从栈里提出，并剪成根、左、右三个树
+                var root = stack.Pop();// 根树   
+                var left = root.Left; // 左树
+                var right = root.Right;// 右树
+                root.Left = null;//剪掉左
+                root.Right = null;//剪掉左
+                bool addRootToStack;//根是否要入栈
 
-        public class BTree
-        {
-            public BTree(int val)
-            {
-                this.Val = val;
+                if (left == null && right == null)
+                {
+                    // 当从栈里取出的树的左/右树为空是，直接读取此节点，并不再入栈
+                    paths.Add(root.Val);
+                    addRootToStack = false;
+                }
+                else
+                {
+                    // 否则将此根节点放入到栈
+                    addRootToStack = true;
+                }
+                if (addRootToStack)
+                {
+                    stack.Push(root);
+                }
+                if (right != null)
+                {
+                    stack.Push(right);
+                }
+                if (left != null)
+                {
+                    stack.Push(left);
+                }
             }
-            public int Val { get; set; }
-            public BTree Left { get; set; }
-            public BTree Right { get; set; }
         }
 
         /// <summary>
-        /// 创建深度为4的全完二叉树
+        /// 先、中、后序迭代的通用方法
         /// </summary>
-        /// <returns></returns>
-        public BTree BuildTestBTree()
+        /// <param name="tree"></param>
+        /// <param name="paths"></param>
+        /// <param name="beforeMiddleAfter"></param>
+        public void IterationAll(BTree tree, out List<int> paths, string beforeMiddleAfter)
         {
-            var allBtree = Enumerable.Range(1, 15).Select(a => new BTree(a)).ToList();
-            for (int i = 0; i <= 6; i++)
+            // 先序：出栈：根，左，右 入栈：右，左，根
+            // 中序：出栈：左，根，右 入栈：右，根，左
+            // 后序：出栈：左，右，根 入栈：根，右，左
+            paths = new List<int>();
+            var stack = new Stack<BTree>();
+            stack.Push(tree);
+            while (stack.Count > 0)
             {
-                allBtree[i].Left = allBtree[i * 2 + 1];
-                allBtree[i].Right = allBtree[i * 2 + 2];
+                // 将树从栈里提出，并剪成根、左、右三个树
+                var root = stack.Pop();// 根树   
+                var left = root.Left; // 左树
+                var right = root.Right;// 右树
+                root.Left = null;//剪掉左
+                root.Right = null;//剪掉左
+                bool addRootToStack;//根是否要入栈
+
+                if (left == null && right == null)
+                {
+                    // 当从栈里取出的树的左/右树为空是，直接读取此节点，并不再入栈
+                    paths.Add(root.Val);
+                    addRootToStack = false;
+                }
+                else
+                {
+                    // 否则将此根节点放入到栈
+                    addRootToStack = true;
+                }
+
+                // 先序、中序、后序的入栈
+                if (beforeMiddleAfter == "after" && addRootToStack)
+                {
+                    stack.Push(root); //后序逻辑
+                }
+                if (right != null)
+                {
+                    stack.Push(right);
+                }
+                if (beforeMiddleAfter == "middle" && addRootToStack)
+                {
+                    stack.Push(root); //中序逻辑
+                }
+                if (left != null)
+                {
+                    stack.Push(left);
+                }
+                if (beforeMiddleAfter == "before" && addRootToStack)
+                {
+                    stack.Push(root); //先序逻辑
+                }
             }
-            return allBtree[0];
         }
+        #endregion
+        #endregion
     }
 }

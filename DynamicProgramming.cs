@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace XUnitTestProject1
+namespace LeetCodeSample
 {
     public class DynamicProgramming
     {
