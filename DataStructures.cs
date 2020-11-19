@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace LeetCodeSample
 {
@@ -31,7 +32,56 @@ namespace LeetCodeSample
             }
             return allBtree[0];
         }
+
+        /// <summary>
+        /// [3,9,20,null,null,15,7]，
+        ///         3
+        ///       9   20
+        ///          15  7
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public static BTree BuildTestBTree1()
+        {
+            var root = new BTree(3)
+            {
+                Left = new BTree(9),
+                Right = new BTree(20) {
+                    Left = new BTree(15), 
+                    Right = new BTree(7) 
+                }
+            };
+            return root;
+        }
+
+        #region 链表
+        public static ListNode GeneratorListNode(int[] nums)
+        {
+            ListNode result = null;
+            ListNode currentNode = null;
+            for (int i = 0; i < nums.Length; i++)
+            {
+                var temp = new ListNode(nums[i]);
+                if (result == null)
+                {
+                    result = temp;
+                    currentNode = result;
+                }
+                else
+                {
+                    currentNode.Next = temp;
+                    currentNode = temp;
+                }
+            }
+            return result;
+        }
+
+
+        #endregion
+
+
     }
+
     #endregion
     #region 树
     /// <summary>
@@ -43,6 +93,7 @@ namespace LeetCodeSample
         {
             this.Val = val;
         }
+     
         public int Val { get; set; }
         public List<Tree> Childs { get; set; }
     }
@@ -55,6 +106,13 @@ namespace LeetCodeSample
         {
             this.Val = val;
         }
+        public BTree(int val, BTree Left, BTree Right)
+        {
+            this.Val = val;
+            this.Left = Left;
+            this.Right = Right;
+        }
+
         public int Val { get; set; }
         public BTree Left { get; set; }
         public BTree Right { get; set; }
@@ -64,8 +122,29 @@ namespace LeetCodeSample
     #region 链表
     public class ListNode
     {
+        public ListNode(int val)
+        {
+            Val = val;
+        }
         public int Val { get; set; }
         public ListNode Next { get; set; }
+        public override string ToString()
+        {
+            if (this == null)
+            {
+                return "";
+            }
+            else
+            {
+                var vals = new List<int>();
+                for (ListNode current = this; current != null; current = current.Next)
+                {
+                    vals.Add(current.Val);
+                }
+                return string.Join(",", vals);
+            }
+        }
     }
+
     #endregion
 }
