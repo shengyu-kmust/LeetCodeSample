@@ -25,7 +25,7 @@ namespace LeetCodeSample
         {
             var result = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
             var sort = new Sort();
-            sort.Method1(nums);
+            //sort.Method1(nums);
             Assert.True(nums.SequenceEqual(result));
 
         }
