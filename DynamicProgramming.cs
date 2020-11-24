@@ -70,5 +70,44 @@ namespace LeetCodeSample
             return dp[amount] == int.MaxValue - 1 ? -1 : dp[amount];
         }
         #endregion
+
+        #region 字符串
+
+        /// <summary>
+        /// 通配符匹配
+        /// </summary>
+        /// <param name="val"></param>
+        /// <param name="reg"></param>
+        /// <returns></returns>
+        public bool Method_44(string val, string reg)
+        {
+            int valLen = val.Length;
+            int regLen = reg.Length;
+            bool[,] dp = new bool[valLen + 1, regLen + 1];
+            dp[0, 0] = true;
+            for (int i = 1; i <= regLen; ++i)
+            {
+                if (reg[i - 1] == '*')
+                {
+                    dp[0, i] = true;
+                }
+            }
+            for (int i = 1; i <= valLen; ++i)
+            {
+                for (int j = 1; j <= regLen; ++j)
+                {
+                    if (reg[j - 1] == '*')
+                    {
+                        dp[i, j] = dp[i, j - 1] || dp[i - 1, j];
+                    }
+                    else if (reg[j - 1] == '?' || val[i - 1] == reg[j - 1])
+                    {
+                        dp[i, j] = dp[i - 1, j - 1];
+                    }
+                }
+            }
+            return dp[valLen, regLen];
+        }
+        #endregion
     }
 }
