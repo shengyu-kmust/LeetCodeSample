@@ -6,21 +6,20 @@
         /// 冒泡排序
         /// </summary>
         /// <param name="nums"></param>
-        public void BobSort(int[] nums)
+        public void BubbleSort(int[] nums)
         {
-            //index: 0,1,2,3....9
-            //currentIndex: 1-9,1-8,1-7,...1-2,1-1
-            // length=10
+            // 单指针(curIndex)两次for循环遍历，设长度为n，curIndex遍历为：1..n-1,1..n-2,...,1
+            // 每次遍历都将当前指针和前指针做比较和值互换，使得当前指针的数值为较大的一个
             int temp;
-            for (int i = nums.Length - 1; i > 0; i--)
+            for (int i = nums.Length - 1; i >= 1; i--)
             {
-                for (int j = 1; j <= i; j++)
+                for (int curIndex = 1; curIndex <= i; curIndex++)
                 {
-                    if (nums[j] < nums[j - 1])
+                    if (nums[curIndex] < nums[curIndex - 1])
                     {
-                        temp = nums[j - 1];
-                        nums[j - 1] = nums[j];
-                        nums[j] = temp;
+                        temp = nums[curIndex];
+                        nums[curIndex] = nums[curIndex - 1];
+                        nums[curIndex - 1] = temp;
                     }
                 }
             }
@@ -32,49 +31,62 @@
         /// <param name="nums"></param>
         public void SelectSort(int[] nums)
         {
-            int temp;
-            for (int currentMinIndex = 0; currentMinIndex < nums.Length - 1; currentMinIndex++)
+            /*
+              双指针法，设和度为n
+              指针curSetIndex为0至curSetIndex范围内最大值要放的位置，curSetIndex遍历为1..n-1
+              指针compareIndex为当前要比较的位置,compareIndex遍历为：0..curSetIndex
+              curMaxValIndex存储一每轮比较的当前最大数据的指针，比较完后再进行curMaxValIndex和curSetIndex的值的交换
+             */
+            int curMaxValIndex, temp;
+            for (int curSetIndex = nums.Length - 1; curSetIndex >= 1; curSetIndex--)
             {
-                for (int compareIndex = currentMinIndex + 1; compareIndex < nums.Length; compareIndex++)
+                curMaxValIndex = 0;
+                for (int compareIndex = 0; compareIndex <= curSetIndex; compareIndex++)
                 {
-                    if (nums[compareIndex] < nums[currentMinIndex])
+                    if (nums[curMaxValIndex] < nums[compareIndex])
                     {
-                        temp = nums[currentMinIndex];
-                        nums[currentMinIndex] = nums[compareIndex];
-                        nums[compareIndex] = temp;
+                        curMaxValIndex = compareIndex;
                     }
                 }
+                temp = nums[curSetIndex];
+                nums[curSetIndex] = nums[curMaxValIndex];
+                nums[curMaxValIndex] = temp;
             }
         }
 
         #region 快排
 
-        public static void quickSort(int[] arr)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="nums"></param>
+        /// <param name="start"></param>
+        /// <param name="end"></param>
+        /// <returns></returns>
+        private void QuickSort(int[] nums, int start, int end)
         {
-            qsort(arr, 0, arr.Length - 1);
-        }
-        private static void qsort(int[] arr, int low, int high)
-        {
-            if (low >= high)
-                return;
-            int pivot = partition(arr, low, high);        //将数组分为两部分
-            qsort(arr, low, pivot - 1);                   //递归排序左子数组
-            qsort(arr, pivot + 1, high);                  //递归排序右子数组
-        }
-        private static int partition(int[] arr, int low, int high)
-        {
-            int pivot = arr[low];     //基准
-            while (low < high)
+            // 递归边界
+            if (start >= end)
             {
-                while (low < high && arr[high] >= pivot) --high;
-                arr[low] = arr[high];             //交换比基准大的记录到左端
-                while (low < high && arr[low] <= pivot) ++low;
-                arr[high] = arr[low];           //交换比基准小的记录到右端
+                return;//其实这里随便返回什么都可以，只要是退出递归即可
             }
-            //扫描完成，基准到位
-            arr[low] = pivot;
-            //返回的是基准的位置
-            return low;
+
+            // 将本分区的所有值小于mid的移到左边，反之移到右边
+            int midVal = nums[start];
+            int lIndex = start;
+            int rIndex = end;
+            while (lIndex < rIndex)
+            {
+                while (lIndex < rIndex && nums[rIndex] >= midVal) rIndex--;
+                nums[lIndex] = nums[rIndex];
+                while (lIndex < rIndex && nums[lIndex] <= midVal) lIndex++;
+                nums[rIndex] = nums[lIndex];
+            }
+            nums[lIndex] = midVal;
+
+            QuickSort(nums, start, lIndex - 1); // 左分区排序
+            QuickSort(nums, lIndex + 1, end); // 左分区排序
+
         }
         #endregion
 
