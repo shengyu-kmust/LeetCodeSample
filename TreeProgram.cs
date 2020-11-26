@@ -229,6 +229,40 @@ namespace LeetCodeSample
             }
         }
         #endregion
+
+        #region BFS遍历
+        public List<int> BFS(BTree tree)
+        {
+            var visitedNodes = new List<int>();
+            if (tree == null)
+            {
+                return visitedNodes;
+            }
+            visitedNodes.Add(tree.Val);
+            BFSInternal(new List<BTree> { tree.Left, tree.Right }, visitedNodes);
+            return visitedNodes;
+        }
+        public void BFSInternal(List<BTree> trees, List<int> visitedNodes)
+        {
+            var nextTrees = new List<BTree>();
+            foreach (var tree in trees)
+            {
+                visitedNodes.Add(tree.Val);
+                if (tree.Left != null)
+                {
+                    nextTrees.Add(tree.Left);
+                }
+                if (tree.Right != null)
+                {
+                    nextTrees.Add(tree.Right);
+                }
+            }
+            if (trees.Count > 1)
+            {
+                BFSInternal(nextTrees, visitedNodes);
+            }
+        }
+        #endregion
         #endregion
     }
 }
