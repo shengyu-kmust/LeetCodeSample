@@ -80,6 +80,40 @@ namespace LeetCodeSample
         #endregion
 
 
+        #region 图
+        /// <summary>
+        /// 用于计算最短路径
+        /// </summary>
+        /// <returns></returns>
+        public static int[,] BuildGraph1()
+        {
+            var paths = new int[6, 6];
+            for (int i = 0; i < 6; i++)
+            {
+                for (int j = 0; j < 6; j++)
+                {
+                    if (i==j)
+                    {
+                        paths[i, j] = 0;
+                    }
+                    else
+                    {
+                        paths[i, j] = int.MaxValue;
+                    }
+                }
+            }
+            paths[0, 1] = 1;
+            paths[0, 2] = 12;
+            paths[1, 3] = 3;
+            paths[1, 2] = 9;
+            paths[2, 4] = 5;
+            paths[3, 2] = 4;
+            paths[3, 4] = 13;
+            paths[3, 5] = 15;
+            paths[4, 5] = 4;
+            return paths;
+        }
+        #endregion
     }
 
     #endregion
@@ -147,4 +181,6 @@ namespace LeetCodeSample
     }
 
     #endregion
+
+   
 }

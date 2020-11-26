@@ -26,7 +26,7 @@ namespace LeetCodeSample
             empty = full + empty;
             full = empty / change;
             empty = empty % change;
-            TT(full, empty, change, ref dri);
+            Method_1518(full, empty, change, ref dri);
         }
     }
 }
