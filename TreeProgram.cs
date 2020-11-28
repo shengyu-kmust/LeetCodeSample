@@ -2,11 +2,11 @@
 
 namespace LeetCodeSample
 {
-    public class TreeProgram
+    public  static class TreeProgram
     {
         #region 遍历
         #region 递归遍历，DFS遍历，即先，中，后序遍历
-        public List<int> RecursionBefore(BTree tree, List<int> paths)
+        public static List<int> RecursionBefore(BTree tree, List<int> paths)
         {
             paths.Add(tree.Val);
             if (tree.Left != null)
@@ -19,7 +19,7 @@ namespace LeetCodeSample
             }
             return paths;
         }
-        public List<int> RecursionMiddle(BTree tree, List<int> paths)
+        public static List<int> RecursionMiddle(BTree tree, List<int> paths)
         {
             if (tree.Left != null)
             {
@@ -33,7 +33,7 @@ namespace LeetCodeSample
             return paths;
         }
 
-        public List<int> RecursionAfter(BTree tree, List<int> paths)
+        public static List<int> RecursionAfter(BTree tree, List<int> paths)
         {
             if (tree.Left != null)
             {
@@ -53,7 +53,7 @@ namespace LeetCodeSample
         /// </summary>
         /// <param name="tree"></param>
         /// <param name="paths"></param>
-        public void IterationBefore(BTree tree, out List<int> paths)
+        public static void IterationBefore(BTree tree, out List<int> paths)
         {
             // 出栈：根，左，右
             // 入栈：右，左，根
@@ -79,7 +79,7 @@ namespace LeetCodeSample
         /// </summary>
         /// <param name="tree"></param>
         /// <param name="paths"></param>
-        public void IterationMiddle(BTree tree, out List<int> paths)
+        public static void IterationMiddle(BTree tree, out List<int> paths)
         {
             // 出栈：左，根，右
             // 入栈：右，根，左
@@ -126,7 +126,7 @@ namespace LeetCodeSample
         /// </summary>
         /// <param name="tree"></param>
         /// <param name="paths"></param>
-        public void IterationAfter(BTree tree, out List<int> paths)
+        public static void IterationAfter(BTree tree, out List<int> paths)
         {
             // 出栈：左，右，根
             // 入栈：根，右，左
@@ -175,7 +175,7 @@ namespace LeetCodeSample
         /// <param name="tree"></param>
         /// <param name="paths"></param>
         /// <param name="beforeMiddleAfter"></param>
-        public void IterationAll(BTree tree, out List<int> paths, string beforeMiddleAfter)
+        public static void IterationAll(BTree tree, out List<int> paths, string beforeMiddleAfter)
         {
             // 先序：出栈：根，左，右 入栈：右，左，根
             // 中序：出栈：左，根，右 入栈：右，根，左
@@ -231,7 +231,7 @@ namespace LeetCodeSample
         #endregion
 
         #region BFS遍历
-        public List<int> BFS(BTree tree)
+        public static List<int> BFS(BTree tree)
         {
             var visitedNodes = new List<int>();
             if (tree == null)
@@ -242,7 +242,7 @@ namespace LeetCodeSample
             BFSInternal(new List<BTree> { tree.Left, tree.Right }, visitedNodes);
             return visitedNodes;
         }
-        public void BFSInternal(List<BTree> trees, List<int> visitedNodes)
+        public static void BFSInternal(List<BTree> trees, List<int> visitedNodes)
         {
             var nextTrees = new List<BTree>();
             foreach (var tree in trees)
@@ -263,6 +263,88 @@ namespace LeetCodeSample
             }
         }
         #endregion
+        #endregion
+
+        #region MyRegion
+
+        /// <summary>
+        /// 验证是否为二叉搜索树
+        /// </summary>
+        /// <param name="tree"></param>
+        /// <returns></returns>
+        public static bool Method_98(BTree tree)
+        {
+            #region 方法一
+            //class Solution
+            //{
+            //    public boolean isValidBST(TreeNode root)
+            //    {
+            //        return helper(root, null, null);
+            //    }
+
+            //    public boolean helper(TreeNode node, Integer lower, Integer upper)
+            //    {
+            //        if (node == null)
+            //        {
+            //            return true;
+            //        }
+
+            //        int val = node.val;
+            //        if (lower != null && val <= lower)
+            //        {
+            //            return false;
+            //        }
+            //        if (upper != null && val >= upper)
+            //        {
+            //            return false;
+            //        }
+
+            //        if (!helper(node.right, val, upper))
+            //        {
+            //            return false;
+            //        }
+            //        if (!helper(node.left, lower, val))
+            //        {
+            //            return false;
+            //        }
+            //        return true;
+            //    }
+            //}
+
+
+            #endregion
+            #region 方法二
+        //class Solution
+        //{
+        //    public boolean isValidBST(TreeNode root)
+        //    {
+        //        Deque<TreeNode> stack = new LinkedList<TreeNode>();
+        //        double inorder = -Double.MAX_VALUE;
+
+        //        while (!stack.isEmpty() || root != null)
+        //        {
+        //            while (root != null)
+        //            {
+        //                stack.push(root);
+        //                root = root.left;
+        //            }
+        //            root = stack.pop();
+        //            // 如果中序遍历得到的节点的值小于等于前一个 inorder，说明不是二叉搜索树
+        //            if (root.val <= inorder)
+        //            {
+        //                return false;
+        //            }
+        //            inorder = root.val;
+        //            root = root.right;
+        //        }
+        //        return true;
+        //    }
+        //}
+
+       
+            #endregion
+            return false;
+        }
         #endregion
     }
 }

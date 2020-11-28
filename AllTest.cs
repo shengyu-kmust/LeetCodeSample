@@ -29,5 +29,33 @@ namespace LeetCodeSample
             Assert.True(nums.SequenceEqual(result));
 
         }
+
+        #region 位运算
+        [Theory]
+        [InlineData(2,1)]
+        [InlineData(3,2)]
+        [InlineData(11,3)]
+        [InlineData(1989, 7)]
+        public void Method_191_Test(int num,int res)
+        {
+            Assert.Equal(res,BitProgram.Method_191(num));
+        }
+        #endregion
+        [Theory]
+        [InlineData(new int[] { -2, 1, -3, 4, -1, 2, 1, -5, 4 },6)]
+        public void Method_53_Test(int[] nums,int res)
+        {
+            Assert.Equal(res, DynamicProgramming.Method_53(nums));
+        }
+
+        #region 堆栈
+        [Theory]
+        [InlineData("()[]{}",true)]
+        [InlineData("([)]", false)]
+        public void Method_20_Test(string s,bool res)
+        {
+            Assert.Equal(res, QueueStackProgram.Method_20(s));
+        }
+        #endregion
     }
 }

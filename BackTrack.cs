@@ -12,6 +12,11 @@ namespace LeetCodeSample
     {
         #region 递归
 
+        /// <summary>
+        /// n皇后问题
+        /// </summary>
+        /// <param name="n"></param>
+        /// <returns></returns>
         public List<List<String>> solveNQueens(int n)
         {
             List<List<String>> solutions = new List<List<String>>();

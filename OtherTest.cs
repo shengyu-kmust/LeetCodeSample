@@ -5,22 +5,9 @@ using Xunit;
 
 namespace LeetCodeSample
 {
-    public class UnitTest1
+    public class OtherTest
     {
-        [Theory]
-        [InlineData(new int[] { 9, 8, 7, 6, 5, 4, 3, 2, 1 })]
-        [InlineData(new int[] { 3, 4, 1, 2, 9, 8, 6, 7, 5 })]
-        public void Test1(int[] nums)
-        {
-            var result = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-
-            Assert.True(nums.SequenceEqual(result));
-        }
-
-        public void Test()
-        {
-
-        }
+       
         #region 数组和字符串
         /// <summary>
         /// 给定一个数组 nums，编写一个函数将所有 0 移动到数组的末尾，同时保持非零元素的相对顺序。
@@ -128,51 +115,6 @@ namespace LeetCodeSample
         #endregion
 
 
-        #region 树
-        /// <summary>
-        /// 二叉树深度-递归
-        /// </summary>
-        [Fact]
-        public void Method_104()
-        {
-            var root = DataStructures.BuildTestBTree1();
-            var dept=Method_104_Private(root);
-            Assert.Equal(dept, 3);
-        }
-        public int Method_104_Private(BTree root)
-        {
-            if (root.Left == null && root.Right == null)
-            {
-                return 1;
-            }
-            return 1 + Math.Max(Method_104_Private(root.Left), Method_104_Private(root.Right));
-        }
-        #endregion
-
-        #region 字典，哈希
-        /// <summary>
-        /// 两数之和
-        /// </summary>
-        /// <param name="nums"></param>
-        /// <param name="target"></param>
-        /// <returns></returns>
-        public int[] Method_1(int[] nums, int target)
-        {
-            var dic = new Dictionary<int, int>();//key为value，value为index
-            for (int i = 0; i < nums.Length; i++)
-            {
-                dic.Add(nums[i], i);
-            }
-            for (int i = 0; i < nums.Length; i++)
-            {
-                if (dic.ContainsKey(target - nums[i]))
-                {
-                    return new int[] { dic[target - nums[i]], dic[nums[i]] };
-                }
-            }
-            return null;
-        }
-        #endregion
     }
 
 }
