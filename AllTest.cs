@@ -54,6 +54,8 @@ namespace LeetCodeSample
         [InlineData("([)]", false)]
         public void Method_20_Test(string s,bool res)
         {
+            Stack<int> a;
+            
             Assert.Equal(res, QueueStackProgram.Method_20(s));
         }
         #endregion
