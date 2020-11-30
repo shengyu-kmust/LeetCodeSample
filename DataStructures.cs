@@ -162,6 +162,7 @@ namespace LeetCodeSample
         }
         public int Val { get; set; }
         public ListNode Next { get; set; }
+        public ListNode Before { get; set; }
         public override string ToString()
         {
             if (this == null)

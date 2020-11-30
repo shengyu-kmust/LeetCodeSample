@@ -10,6 +10,88 @@ namespace LeetCodeSample
     public static  class LinkListProgram
     {
         #region lru
+        #region 我的解法
+        public class LRUCache
+        {
+            public string Key { get; set; }
+            public object Val { get; set; }
+            public LRUCache Before { get; set; }
+            public LRUCache Next { get; set; }
+            public static int _capacity = 3;
+            public static Dictionary<string, LRUCache> _cache = new Dictionary<string, LRUCache>();
+            public static LRUCache _head = new LRUCache("head", "head"), _tail = new LRUCache("tail", "tail");// 为方便访问头和尾
+            static LRUCache()
+            {
+                _head.Next = _tail;
+                _head.Before = null;
+                _tail.Before = _head;
+                _tail.Next = null;
+            }
+            public LRUCache(string key, object val)
+            {
+                this.Key = key;
+                this.Val = val;
+            }
+
+            public object Get(string key)
+            {
+                _cache.TryGetValue(key, out LRUCache node);
+                return node.Val;
+            }
+
+            public static void Put(string key, object val)
+            {
+                if (_cache.ContainsKey(key))
+                {
+                    // move the key to head
+                    var node = (LRUCache)_cache[key];
+                    RemoveNode(node);
+                    MoveToHead(node);
+                }
+                else
+                {
+                    var cur = new LRUCache(key, val);
+                    if (_cache.Count < _capacity)
+                    {
+                        // add node to head
+                        MoveToHead(cur);
+                    }
+                    else
+                    {
+                        // remove the buttom
+                        _cache.Remove(_tail.Before.Key);
+                        RemoveNode(_tail.Before);
+                        // add to the head
+                        MoveToHead(new LRUCache(key, val));
+                    }
+                    _cache.Add(key, cur);
+                }
+
+            }
+
+
+
+            private static void MoveToHead(LRUCache node)
+            {
+                var headNext = _head.Next;
+                _head.Next = node;
+                node.Next = headNext;
+                node.Before = _head;
+                headNext.Before = node;
+            }
+            private static void RemoveNode(LRUCache node)
+            {
+                if (node.Before != null)
+                {
+                    node.Before.Next = node.Next;
+                }
+                if (node.Next != null)
+                {
+                    node.Next.Before = node.Before;
+                }
+            }
+        }
+        #endregion
         //public class LRUCache
         //{
         //    class DLinkedNode
