@@ -190,5 +190,35 @@ namespace LeetCodeSample
         //}
 
         #endregion
+
+        /// <summary>
+        /// 合并两个有序链表
+        /// </summary>
+        /// <param name="node1"></param>
+        /// <param name="node2"></param>
+        /// <returns></returns>
+        public static ListNode Method_21_1(ListNode node1,ListNode node2)
+        {
+            // 1->3->5
+            // 2->4->6
+            if (node1 == null)
+            {
+                return node2;
+            }
+            if (node2 == null)
+            {
+                return node1;
+            }
+            if (node1.Val < node2.Val)
+            {
+                node1.Next = T(node1.Next, node2);
+                return node1;
+            }
+            else
+            {
+                node2.Next = T(node2.Next, node1);
+                return node2;
+            }
+        }
     }
 }

@@ -68,10 +68,10 @@ namespace LeetCodeSample
         /// <param name="s"></param>
         /// <param name="p"></param>
         /// <returns></returns>
-        public bool IsMatch(string s, string p)
+        public static bool IsMatch(string s, string p)
         {
 
-
+            return false;
         }
         #endregion
     }

@@ -48,32 +48,28 @@ namespace LeetCodeSample
         /// <returns></returns>
         public static int CoinsDp1(int[] coins, int amount)
         {
+            // 动态方程 dp[i]=min(dp[i],dp[i-k]+1); k in coins
+            // 初始化最小动态方程
             var dp = new int[amount + 1];
-            for (int j = 0; j < amount + 1; j++)
+            Array.Fill(dp, int.MaxValue);
+            for (int i = 0; i < coins.Length && coins[i] <= amount; i++)
             {
-                dp[j] = int.MaxValue - 1;
-            }
-            // 能确定的初始值
-            for (int i = 0; i < coins.Length; i++)
-            {
-                if (coins[i] < amount + 1)
-                {
-                    dp[coins[i]] = 1;
-                }
+                dp[coins[i]] = 1;
             }
 
-            // 
-            for (int i = 0; i < coins.Length; i++)
+            // 动态方程计算
+            for (var i = 1; i <= amount; i++)
             {
-                for (int j = 0; j < amount + 1; j++)
+                for (var j = 0; j < coins.Length; j++)
                 {
-                    if (j + coins[i] < amount + 1)
+                    var k = coins[j];
+                    if (i - k > 0)
                     {
-                        dp[j + coins[i]] = Math.Min(dp[j + coins[i]], dp[j] + 1);//动态规划状态方程
+                        dp[i] = Math.Min(dp[i], dp[i - k] == int.MaxValue ? int.MaxValue : dp[i - k] + 1);
                     }
                 }
             }
-            return dp[amount] == int.MaxValue - 1 ? -1 : dp[amount];
+            return dp[amount] == int.MaxValue ? -1 : dp[amount];
         }
         #endregion
 
@@ -85,34 +81,38 @@ namespace LeetCodeSample
         /// <param name="val"></param>
         /// <param name="reg"></param>
         /// <returns></returns>
-        public static bool Method_44(string val, string reg)
+        /// <remarks>
+        ///  给定一个字符串 (s) 和一个字符模式 (p) ，实现一个支持 '?' 和 '*' 的通配符匹配。
+        /// </remarks>
+        public static bool Method_44(string s, string p)
         {
-            int valLen = val.Length;
-            int regLen = reg.Length;
-            bool[,] dp = new bool[valLen + 1, regLen + 1];
+
+            // dp[i,j]表示s的前i个字符和p的前j个字符的匹配结果
+            // 即有如下逻辑
+            // 当p[j-1] == '*'：dp[i, j] = dp[i - 1, j - 1] && s[i-1] == p[j-1];
+            // 当p[j-1] == '?'：dp[i, j] = dp[i - 1, j - 1]; 
+            // 当p[j-1]为正常字符时：dp[i, j] = dp[i, j - 1] || dp[i - 1, j];
+            var dp = new bool[s.Length + 1, p.Length + 1];
             dp[0, 0] = true;
-            for (int i = 1; i <= regLen; ++i)
+            for (var i = 1; i <= s.Length; i++)
             {
-                if (reg[i - 1] == '*')
+                for (var j = 1; j <= p.Length; j++)
                 {
-                    dp[0, i] = true;
-                }
-            }
-            for (int i = 1; i <= valLen; ++i)
-            {
-                for (int j = 1; j <= regLen; ++j)
-                {
-                    if (reg[j - 1] == '*')
+                    if (p[j - 1] == '*')
                     {
                         dp[i, j] = dp[i, j - 1] || dp[i - 1, j];
                     }
-                    else if (reg[j - 1] == '?' || val[i - 1] == reg[j - 1])
+                    else if (p[j - 1] == '?')
                     {
                         dp[i, j] = dp[i - 1, j - 1];
                     }
+                    else
+                    {
+                        dp[i, j] = dp[i - 1, j - 1] && s[i - 1] == p[j - 1];
+                    }
                 }
             }
-            return dp[valLen, regLen];
+            return dp[s.Length, p.Length];
         }
 
         /// <summary>
@@ -171,6 +171,98 @@ namespace LeetCodeSample
             return dp[len];
 
         }
+
+        #region 最长回文串
+        public static string Method_5_2(String s)
+        {
+            if (s == null || s.Length < 1)
+            {
+                return "";
+            }
+            int start = 0, end = 0;
+            for (int i = 0; i < s.Length; i++)
+            {
+                int len1 = Method_5_2_Internal(s, i, i);
+                int len2 = Method_5_2_Internal(s, i, i + 1);
+                int len = Math.Max(len1, len2);
+                if (len > end - start)
+                {
+                    start = i - (len - 1) / 2;
+                    end = i + len / 2;
+                }
+            }
+            return s.Substring(start, end + 1);
+        }
+
+        public static int Method_5_2_Internal(String s, int left, int right)
+        {
+            while (left >= 0 && right < s.Length && s[left] == s[right])
+            {
+                --left;
+                ++right;
+            }
+            return right - left - 1;
+        }
+        /// <summary>
+        /// 最长回文串
+        /// </summary>
+        public static string Method_5(string s)
+        {
+            int n = s.Length;
+            bool[,] dp = new bool[n, n];
+            string ans = "";
+            for (int l = 0; l < n; ++l)
+            {
+                for (int i = 0; i + l < n; ++i)
+                {
+                    int j = i + l;
+                    if (l == 0)
+                    {
+                        dp[i, j] = true;
+                    }
+                    else if (l == 1)
+                    {
+                        dp[i, j] = (s[i] == s[j]);
+                    }
+                    else
+                    {
+                        dp[i, j] = (s[i] == s[j] && dp[i + 1, j - 1]);
+                    }
+                    if (dp[i, j] && l + 1 > ans.Length)
+                    {
+                        ans = s.Substring(i, i + l + 1);
+                    }
+                }
+            }
+            return ans;
+        }
         #endregion
+
+        #endregion
+
+        
+        /// <summary>
+        /// 爬楼梯
+        /// </summary>
+        /// <param name="n"></param>
+        /// <returns></returns>
+        public static int Method_70(int n)
+        {
+            // dp[n]=min(dp[n-1]+1,dp[n-2]+1)
+            if (n <= 2)
+            {
+                return 1;
+            }
+            var dp = new int[n + 1];
+            dp[1] = 1;
+            dp[2] = 1;
+
+            for (var i = 3; i < n + 1; i++)
+            {
+                dp[i] = Math.Min(dp[i - 1] + 1, dp[i - 2] + 1);
+            }
+            return dp[n];
+        }
+        
     }
 }
