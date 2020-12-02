@@ -21,7 +21,8 @@ namespace LeetCodeSample
 
         public static void Dijkstra_internal(int[,] paths, HashSet<int> visited, int current, int num, int[] fromToAllPath)
         {
-            //int[i,j]=int[i,k]+int[k,j] //k in (和j连接的点)
+            // fromToAllPath[i] 为源点到i点的最短距离
+            // fromToAllPath[i]=min(fromToAllPath[i],fromToAllPath[k]+paths[k,i])
             var nexts = new List<int>();
             for (int next = 0; next < num; next++)
             {

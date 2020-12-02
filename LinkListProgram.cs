@@ -211,14 +211,48 @@ namespace LeetCodeSample
             }
             if (node1.Val < node2.Val)
             {
-                node1.Next = T(node1.Next, node2);
+                node1.Next = Method_21_1(node1.Next, node2);
                 return node1;
             }
             else
             {
-                node2.Next = T(node2.Next, node1);
+                node2.Next = Method_21_1(node2.Next, node1);
                 return node2;
             }
         }
+
+
+        #region 反转链表
+        public static ListNode Method_206_Recursion(ListNode node1)
+        {
+            // 1->2->3->4
+            //边界
+            if (node1.Next == null)
+            {
+                return node1;
+            }
+            //逻辑
+            var nextNewNode = Method_206_Recursion(node1.Next);
+            node1.Next.Next = node1;
+            node1.Next = null;
+            return nextNewNode;
+        }
+        public static ListNode Method_206_Iteration(ListNode listNode)
+        {
+            // new
+            // 1->2->3
+            // cur
+            ListNode newNode = null, cur = null;
+            while (listNode != null)
+            {
+                cur = listNode;
+                listNode = listNode.Next;
+                cur.Next = newNode;
+                newNode = cur;
+            }
+            return newNode;
+        }
+        #endregion
+
     }
 }

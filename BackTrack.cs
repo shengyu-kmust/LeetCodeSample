@@ -14,7 +14,7 @@ namespace LeetCodeSample
         /// <summary>
         /// 8-92种，4-2种
         /// </summary>
-        /// <param name="q"></param>
+        /// <param name="q">q[i]表示第i行的皇后位置</param>
         /// <param name="n"></param>
         /// <param name="row"></param>
         /// <param name="res"></param>
@@ -39,6 +39,12 @@ namespace LeetCodeSample
             }
         }
 
+        /// <summary>
+        /// 前row是否满足条件
+        /// </summary>
+        /// <param name="q"></param>
+        /// <param name="row"></param>
+        /// <returns></returns>
         public static bool NQueueRecursionIsOk(int[] q, int row)
         {
             for (int i = 0; i < row; i++)
