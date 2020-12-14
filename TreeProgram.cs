@@ -5,6 +5,7 @@ namespace LeetCodeSample
     public  static class TreeProgram
     {
         #region 遍历
+        #region DFS遍历
         #region 递归遍历，DFS遍历，即先，中，后序遍历
         public static List<int> RecursionBefore(BTree tree, List<int> paths)
         {
@@ -191,22 +192,16 @@ namespace LeetCodeSample
                 var right = root.Right;// 右树
                 root.Left = null;//剪掉左
                 root.Right = null;//剪掉左
-                bool addRootToStack;//根是否要入栈
 
                 if (left == null && right == null)
                 {
                     // 当从栈里取出的树的左/右树为空是，直接读取此节点，并不再入栈
                     paths.Add(root.Val);
-                    addRootToStack = false;
-                }
-                else
-                {
-                    // 否则将此根节点放入到栈
-                    addRootToStack = true;
+                    continue;
                 }
 
                 // 先序、中序、后序的入栈
-                if (beforeMiddleAfter == "after" && addRootToStack)
+                if (beforeMiddleAfter == "after")
                 {
                     stack.Push(root); //后序逻辑
                 }
@@ -214,7 +209,7 @@ namespace LeetCodeSample
                 {
                     stack.Push(right);
                 }
-                if (beforeMiddleAfter == "middle" && addRootToStack)
+                if (beforeMiddleAfter == "middle")
                 {
                     stack.Push(root); //中序逻辑
                 }
@@ -222,15 +217,18 @@ namespace LeetCodeSample
                 {
                     stack.Push(left);
                 }
-                if (beforeMiddleAfter == "before" && addRootToStack)
+                if (beforeMiddleAfter == "before")
                 {
                     stack.Push(root); //先序逻辑
                 }
             }
         }
         #endregion
+        #endregion
+
 
         #region BFS遍历
+        #region 递归
         public static List<int> BFS(BTree tree)
         {
             var visitedNodes = new List<int>();
@@ -262,6 +260,38 @@ namespace LeetCodeSample
                 BFSInternal(nextTrees, visitedNodes);
             }
         }
+
+        #endregion
+        #region 迭代
+
+        /// <summary>
+        /// 用queue结构来迭代
+        /// </summary>
+        /// <param name="tree"></param>
+        /// <returns></returns>
+        public static List<int> BFSTreeIteration(BTree tree)
+        {
+            var queue = new Queue<BTree>();
+            queue.Enqueue(tree);
+            var res = new List<int>();
+            while (queue.Count > 0)
+            {
+                var tmp = queue.Dequeue();
+                res.Add(tmp.Val);
+                if (tmp.Left != null)
+                {
+                    queue.Enqueue(tmp.Left);
+                }
+                if (tmp.Right != null)
+                {
+                    queue.Enqueue(tmp.Right);
+                }
+            }
+            return res;
+
+        }
+        #endregion
+
         #endregion
         #endregion
 

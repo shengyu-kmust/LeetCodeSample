@@ -82,7 +82,7 @@ namespace LeetCodeSample
 
         #region 图
         /// <summary>
-        /// 用于计算最短路径
+        /// 用于计算最短路径，6个节点
         /// </summary>
         /// <returns></returns>
         public static int[,] BuildGraph1()
