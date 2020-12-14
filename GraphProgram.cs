@@ -21,7 +21,8 @@ namespace LeetCodeSample
 
         public static void Dijkstra_internal(int[,] paths, HashSet<int> visited, int current, int num, int[] fromToAllPath)
         {
-            //int[i,j]=int[i,k]+int[k,j] //k in (和j连接的点)
+            // fromToAllPath[i] 为源点到i点的最短距离
+            // fromToAllPath[i]=min(fromToAllPath[i],fromToAllPath[k]+paths[k,i])
             var nexts = new List<int>();
             for (int next = 0; next < num; next++)
             {
@@ -41,6 +42,63 @@ namespace LeetCodeSample
             {
                 Dijkstra_internal(paths, visited, nexts[i], num, fromToAllPath);
             }
+        }
+        #endregion
+
+        #region 
+        /// <summary>
+        /// 我的dijkstra算法，用queue和hash
+        /// </summary>
+        /// <param name="paths"></param>
+        /// <param name="fromP"></param>
+        /// <param name="toP"></param>
+        /// <param name="n"></param>
+        /// <returns></returns>
+        public static int DijkstraQueue(int[,] paths, int fromP, int toP, int n)
+        {
+            // D(j)表示到j的最短路径
+            // D(j)=D(k)+p(k,j)，k为和j和直接相连的点
+            // 设D[i]为fromP到i点的最短距离
+            var queue = new Queue<int>();// need to visit
+            var visited = new HashSet<int>();
+            queue.Enqueue(fromP);
+            var d = InitFromPToAll(paths, fromP, n);
+            while (queue.Count > 0)
+            {
+                var thisNode = queue.Dequeue();
+                var toNodes = PushNeedVisitToQueue(visited, thisNode, queue, n, paths);
+                for (var i = 0; i < toNodes.Count; i++)
+                {
+                    d[toNodes[i]] = Math.Min(d[toNodes[i]], paths[thisNode, toNodes[i]] == int.MaxValue ? int.MaxValue : d[thisNode] + paths[thisNode, toNodes[i]]);
+                }
+            }
+            return d[toP];
+        }
+        private static int[] InitFromPToAll(int[,] paths, int fromP, int n)
+        {
+            int[] d = new int[n];
+            for (var i = 0; i < n; i++)
+            {
+                d[i] = paths[fromP, i];
+            }
+            return d;
+        }
+        private static List<int> PushNeedVisitToQueue(HashSet<int> visited, int source, Queue<int> queue, int n, int[,] paths)
+        {
+            var res = new List<int>();
+            for (var i = 0; i < n; i++)
+            {
+                if (paths[source, i] != int.MaxValue)
+                {
+                    if (!visited.Contains(i))
+                    {
+                        visited.Add(i);
+                        queue.Enqueue(i);
+                    }
+                    res.Add(i);
+                }
+            }
+            return res;
         }
         #endregion
         #region Floyd

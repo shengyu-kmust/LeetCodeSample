@@ -164,7 +164,7 @@ namespace LeetCodeSample
 
 
 
-            for (int i=2; i <= len; i++)
+            for (int i = 2; i <= len; i++)
             {
                 dp[i] = Math.Max(dp[i - 1], dp[i - 1] + nums[i - 1]);
             }
@@ -240,7 +240,7 @@ namespace LeetCodeSample
 
         #endregion
 
-        
+
         /// <summary>
         /// 爬楼梯
         /// </summary>
@@ -263,6 +263,74 @@ namespace LeetCodeSample
             }
             return dp[n];
         }
-        
+
+
+        #region 01背包问题
+
+        /// <summary>
+        /// 我的解法
+        /// </summary>
+        /// <param name="weight"></param>
+        /// <param name="value"></param>
+        /// <param name="large"></param>
+        /// <returns></returns>
+        public static int MaxValue1(int[] weight, int[] value, int large)
+        {
+            // dp[i,w]=min(dp[i-1,w],dp[i-1,w-weight[i]]+value[i]) i>=1;w>=1
+            var n = weight.Length;
+            //初始
+            var dp = new int[n + 1, large + 1];
+            for (var j = 1; j < large + 1; j++)
+            {
+                if (large >= weight[1])
+                {
+                    dp[1, j] = value[0];
+                }
+            }
+
+            for (var i = 2; i <= n; i++)
+            {
+                for (var w = 1; w <= large; w++)
+                {
+                    //// 装不下第i个
+                    if (w - weight[i - 1] < 0)
+                    {
+                        dp[i, w] = dp[i - 1, w];
+                    }
+                    else
+                    {
+                        // 装得下时，可选择装和不装
+                        dp[i, w] = Math.Max(dp[i - 1, w], dp[i - 1, w - weight[i - 1]] + value[i - 1]);
+                    }
+                }
+            }
+            return dp[n, large];
+        }
+
+        public static int MaxValue(int[] weight, int[] value, int w)
+        {
+            //这里假定传入的weight和values数组长度总是一致的
+            int n = weight.Length;
+            if (n == 0) return 0;
+            /*
+              dp[i][w] 表示前 i 件物品放入容量为 w 的背包中可获得的最大价值。
+              dp[i][k] = max(value[i] + dp[i-1][k-weight[i]], dp[i-1][k])
+             
+             */
+            int[,] dp = new int[n + 1, w + 1];
+            for (int i = 1; i <= n; i++)
+            {
+                for (int k = 1; k <= w; k++)
+                {
+                    // 存放 i 号物品（前提是放得下这件物品）
+                    int valueWith_i = (k - weight[i - 1] >= 0) ? (value[i - 1] + dp[i - 1,k - weight[i - 1]]) : 0;
+                    // 不存放 i 号物品
+                    int valueWithout_i = dp[i - 1,k];
+                    dp[i,k] = Math.Max(valueWith_i, valueWithout_i);
+                }
+            }
+            return dp[n,w];
+        }
+        #endregion
     }
 }

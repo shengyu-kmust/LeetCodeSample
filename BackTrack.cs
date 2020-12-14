@@ -38,6 +38,12 @@ namespace LeetCodeSample
             }
         }
 
+        /// <summary>
+        /// 前row是否满足条件
+        /// </summary>
+        /// <param name="q"></param>
+        /// <param name="row"></param>
+        /// <returns></returns>
         public static bool NQueueRecursionIsOk(int[] q, int row)
         {
             for (int i = 0; i < row; i++)

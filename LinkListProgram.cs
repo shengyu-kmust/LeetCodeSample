@@ -220,5 +220,39 @@ namespace LeetCodeSample
                 return node2;
             }
         }
+
+
+        #region 反转链表
+        public static ListNode Method_206_Recursion(ListNode node1)
+        {
+            // 1->2->3->4
+            //边界
+            if (node1.Next == null)
+            {
+                return node1;
+            }
+            //逻辑
+            var nextNewNode = Method_206_Recursion(node1.Next);
+            node1.Next.Next = node1;
+            node1.Next = null;
+            return nextNewNode;
+        }
+        public static ListNode Method_206_Iteration(ListNode listNode)
+        {
+            // new
+            // 1->2->3
+            // cur
+            ListNode newNode = null, cur = null;
+            while (listNode != null)
+            {
+                cur = listNode;
+                listNode = listNode.Next;
+                cur.Next = newNode;
+                newNode = cur;
+            }
+            return newNode;
+        }
+        #endregion
+
     }
 }
