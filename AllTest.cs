@@ -59,5 +59,46 @@ namespace LeetCodeSample
             Assert.Equal(res, QueueStackProgram.Method_20(s));
         }
         #endregion
+
+
+        [Fact]
+       public void Test()
+        {
+            try
+            {
+                var list = new List<int> { 1, 3, 5, 7, 9, 2, 4, 6, 8 };
+                Sort(list);
+                //Sort.QuickSort(list, 0, list.Length - 1);
+            }
+            catch (Exception ex)
+            {
+                var a = ex;
+            }
+         
+        }
+
+        public void Sort(List<int> list)
+        {
+            // 0,1,2...9
+            var len = list.Count;
+            int tmpMaxIndex,tmp;
+
+            for(var i = len - 1; i >=1; i--)
+            {
+                // i为本次循环要设置的最大值
+                tmpMaxIndex = 0;
+                for(var j = 0; j <= i; j++)
+                {
+                    if(list[j]>=list[tmpMaxIndex])
+                    {
+                        tmpMaxIndex = j;
+                    }
+                }
+                tmp = list[tmpMaxIndex];
+                list[tmpMaxIndex] = list[i];
+                list[i] = tmp;
+            }
+
+        }
     }
 }

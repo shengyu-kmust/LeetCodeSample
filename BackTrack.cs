@@ -14,27 +14,26 @@ namespace LeetCodeSample
         /// <summary>
         /// 8-92种，4-2种
         /// </summary>
-        /// <param name="q"></param>
-        /// <param name="n"></param>
+        /// <param name="q">q[i]表示第i行的q[i]个数有皇后</param>
+        /// <param name="n">n皇后的变量</param>
         /// <param name="row"></param>
         /// <param name="res"></param>
         public static void NQueueRecursion(int[] q, int n, int row, List<int[]> res)
         {
             if (row == n)
             {
+                // 递归的边界
                 var temp = new int[q.Length];
                 q.CopyTo(temp, 0);
                 res.Add(temp);
+                return;
             }
-            else
+            for (int i = 0; i < n; i++)
             {
-                for (int i = 0; i < n; i++)
+                q[row] = i;
+                if (NQueueRecursionIsOk(q, row))
                 {
-                    q[row] = i;
-                    if (NQueueRecursionIsOk(q, row))
-                    {
-                        NQueueRecursion(q, n, row + 1, res);
-                    }
+                    NQueueRecursion(q, n, row + 1, res);
                 }
             }
         }

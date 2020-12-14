@@ -63,7 +63,7 @@
         /// <param name="start"></param>
         /// <param name="end"></param>
         /// <returns></returns>
-        private void QuickSort(int[] nums, int start, int end)
+        public static void QuickSort(int[] nums, int start, int end)
         {
             // 递归边界
             if (start >= end)
@@ -77,8 +77,10 @@
             int rIndex = end;
             while (lIndex < rIndex)
             {
+                // 右边先
                 while (lIndex < rIndex && nums[rIndex] >= midVal) rIndex--;
                 nums[lIndex] = nums[rIndex];
+                //再左边
                 while (lIndex < rIndex && nums[lIndex] <= midVal) lIndex++;
                 nums[rIndex] = nums[lIndex];
             }

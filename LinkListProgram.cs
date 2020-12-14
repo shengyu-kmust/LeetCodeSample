@@ -211,12 +211,12 @@ namespace LeetCodeSample
             }
             if (node1.Val < node2.Val)
             {
-                node1.Next = T(node1.Next, node2);
+                node1.Next = Method_21_1(node1.Next, node2);
                 return node1;
             }
             else
             {
-                node2.Next = T(node2.Next, node1);
+                node2.Next = Method_21_1(node2.Next, node1);
                 return node2;
             }
         }
